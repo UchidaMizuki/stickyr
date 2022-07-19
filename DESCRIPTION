@@ -1,6 +1,6 @@
 Package: mainframes
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Data Frames With Persistent Columns and Attributes
 Version: 0.1.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
