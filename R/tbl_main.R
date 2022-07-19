@@ -90,6 +90,26 @@ as_tbl_main.tbl_main <- function(x, ...) {
   update_main_cols(out, main_col_names, attrs)
 }
 
+#' @export
+`names<-.tbl_main` <- function(x, value) {
+  col_names <- names(x)
+  value <- set_names(value, col_names)
+
+  attrs <- attributes(x)
+  main_col_names <- attrs$main_col_names
+  x <- update_main_cols(x, main_col_names, attrs)
+
+  main_col_names <- unname(value[main_col_names])
+  main_col_summary <- set_names(attrs$main_col_summary, main_col_names)
+  main_col_show <- set_names(attrs$main_col_show, main_col_names)
+
+  attr(x, "main_col_names") <- main_col_names
+  attr(x, "main_col_summary") <- main_col_summary
+  attr(x, "main_col_show") <- main_col_show
+
+  NextMethod()
+}
+
 update_main_cols <- function(x, main_col_names, attrs) {
   attr(x, "main_col_names") <- main_col_names
   attr(x, "main_col_summary") <- attrs$main_col_summary[main_col_names]
@@ -117,23 +137,6 @@ drop_hidden_cols <- function(x) {
   x[!names(x) %in% hidden_col_names]
 }
 
-rename_main_cols <- function(.data, ...) {
-  attrs <- attributes(.data)
-  main_col_names <- attrs$main_col_names
-  .data <- update_main_cols(.data, main_col_names, attrs)
-
-  loc <- tidyselect::eval_rename(expr(c(...)), set_names(main_col_names))
-
-  main_col_names[loc] <- names(loc)
-  main_col_summary <- set_names(attrs$main_col_summary, main_col_names)
-  main_col_show <- set_names(attrs$main_col_show, main_col_names)
-
-  attr(.data, "main_col_names") <- main_col_names
-  attr(.data, "main_col_summary") <- main_col_summary
-  attr(.data, "main_col_show") <- main_col_show
-  .data
-}
-
 #' @export
 format.tbl_main <- function(x, ...) {
   x <- drop_hidden_cols(x)
@@ -158,17 +161,6 @@ tbl_sum.tbl_main <- function(x) {
   out
 }
 
-#' @importFrom dplyr rename
-#' @export
-rename.tbl_main <- function(.data, ...) {
-  loc <- tidyselect::eval_rename(expr(c(...)), .data)
-  names <- names(.data)
-  names[loc] <- names(loc)
-  .data <- set_names(.data, names)
-
-  rename_main_cols(.data, ...)
-}
-
 #' @importFrom dplyr select
 #' @export
 select.tbl_main <- function(.data, ...) {
@@ -187,7 +179,6 @@ select.tbl_main <- function(.data, ...) {
 
   update_main_cols(out, main_col_names, attrs)
 }
-
 
 #' #' @export
 #' new_main_frame <- function(x, is,
