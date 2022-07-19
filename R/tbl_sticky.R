@@ -1,183 +1,190 @@
 #' @export
-new_tbl_main <- function(x = list(),
-                         main_col_names = character(),
-                         main_col_summary = list(),
-                         main_col_show = list(), ...,
-                         main_attr_names = character(),
-                         class = character(),
-                         class_grouped = character(),
-                         class_rowwise = character()) {
-  # main_col_names
-  main_col_names <- vec_cast(main_col_names, character())
+new_tbl_sticky <- function(x = list(),
+                           sticky_col_names = character(),
+                           sticky_col_summary = list(),
+                           sticky_col_show = list(), ...,
+                           sticky_attr_names = character(),
+                           class = character(),
+                           class_grouped = character(),
+                           class_rowwise = character()) {
+  # sticky_col_names
+  sticky_col_names <- vec_cast(sticky_col_names, character())
 
-  # main_col_summary
-  main_col_summary <- vec_cast(main_col_summary, list())
+  # sticky_col_summary
+  sticky_col_summary <- vec_cast(sticky_col_summary, list())
 
-  if (is_named(main_col_summary) && !all(names(main_col_summary) %in% main_col_names)) {
-    abort("Names of `main_col_summary` must be included in `main_col_names`.")
+  if (is_named(sticky_col_summary) && !all(names(sticky_col_summary) %in% sticky_col_names)) {
+    abort("Names of `sticky_col_summary` must be included in `sticky_col_names`.")
   }
 
-  main_col_summary <- set_names(main_col_summary[main_col_names],
-                                main_col_names)
-  main_col_summary <- purrr::modify(main_col_summary,
-                                    ~ {
-                                      out <- .x %||% vec_init
+  sticky_col_summary <- set_names(sticky_col_summary[sticky_col_names],
+                                  sticky_col_names)
+  sticky_col_summary <- purrr::modify(sticky_col_summary,
+                                      ~ {
+                                        out <- .x %||% vec_init
 
-                                      if (!is_function(out)) {
-                                        abort("`main_col_summary` must be a list of functions")
-                                      }
+                                        if (!is_function(out)) {
+                                          abort("`sticky_col_summary` must be a list of functions")
+                                        }
 
-                                      out
-                                    })
+                                        out
+                                      })
 
-  # main_col_show
-  main_col_show <- vec_cast(main_col_show, list())
+  # sticky_col_show
+  sticky_col_show <- vec_cast(sticky_col_show, list())
 
-  if (is_named(main_col_show) && !all(names(main_col_show) %in% main_col_names)) {
-    abort("Names of `main_col_show` must be included in `main_col_names`.")
+  if (is_named(sticky_col_show) && !all(names(sticky_col_show) %in% sticky_col_names)) {
+    abort("Names of `sticky_col_show` must be included in `sticky_col_names`.")
   }
 
-  main_col_show <- set_names(main_col_show[main_col_names],
-                             main_col_names)
-  main_col_show <- purrr::modify(main_col_show,
-                                 ~ vec_cast(.x %||% TRUE, logical()))
+  sticky_col_show <- set_names(sticky_col_show[sticky_col_names],
+                               sticky_col_names)
+  sticky_col_show <- purrr::modify(sticky_col_show,
+                                   ~ vec_cast(.x %||% TRUE, logical()))
 
-  # main_attr_names
-  main_attr_names <- vec_cast(main_attr_names, character())
+  # sticky_attr_names
+  sticky_attr_names <- vec_cast(sticky_attr_names, character())
 
   out <- tibble::new_tibble(x,
-                            main_col_names = main_col_names,
-                            main_col_summary = main_col_summary,
-                            main_col_show = main_col_show, ...,
-                            main_attr_names = main_attr_names,
-                            class = c(class, "tbl_main"),
+                            sticky_col_names = sticky_col_names,
+                            sticky_col_summary = sticky_col_summary,
+                            sticky_col_show = sticky_col_show, ...,
+                            sticky_attr_names = sticky_attr_names,
+                            class = c(class, "tbl_sticky"),
                             class_tbl = class,
                             class_grouped = class_grouped,
                             class_rowwise = class_rowwise)
 
-  if (!all(main_col_names %in% names(out))) {
-    abort("`x` must have `main_col_names` as column names.")
+  if (!all(sticky_col_names %in% names(out))) {
+    abort("`x` must have `sticky_col_names` as column names.")
   }
 
-  if (!all(main_attr_names %in% names(attributes(out)))) {
-    abort("`...` must provide attributes with `main_attr_names`.")
+  if (!all(sticky_attr_names %in% names(attributes(out)))) {
+    abort("`...` must provide attributes with `sticky_attr_names`.")
   }
 
   out
 }
 
 #' @export
-as_tbl_main <- function(x, ...) {
-  UseMethod("as_tbl_main")
+as_tbl_sticky <- function(x, ...) {
+  UseMethod("as_tbl_sticky")
 }
 
 #' @export
-as_tbl_main.tbl_main <- function(x, ...) {
+as_tbl_sticky.tbl_sticky <- function(x, ...) {
   x
 }
 
 #' @export
-`[.tbl_main` <- function(x, ...) {
+`[.tbl_sticky` <- function(x, ...) {
   out <- NextMethod()
 
   attrs <- attributes(x)
 
-  # main_cols
+  # sticky_cols
   col_names <- names(out)
-  main_col_names <- attrs$main_col_names
-  main_col_names <- col_names[col_names %in% main_col_names]
+  sticky_col_names <- attrs$sticky_col_names
+  sticky_col_names <- col_names[col_names %in% sticky_col_names]
 
-  update_main_cols(out, main_col_names, attrs)
+  update_sticky_cols(out, sticky_col_names, attrs)
 }
 
 #' @export
-`names<-.tbl_main` <- function(x, value) {
+`names<-.tbl_sticky` <- function(x, value) {
   col_names <- names(x)
   value <- set_names(value, col_names)
 
   attrs <- attributes(x)
-  main_col_names <- attrs$main_col_names
-  x <- update_main_cols(x, main_col_names, attrs)
+  sticky_col_names <- attrs$sticky_col_names
+  x <- update_sticky_cols(x, sticky_col_names, attrs)
 
-  main_col_names <- unname(value[main_col_names])
-  main_col_summary <- set_names(attrs$main_col_summary, main_col_names)
-  main_col_show <- set_names(attrs$main_col_show, main_col_names)
+  sticky_col_names <- unname(value[sticky_col_names])
+  sticky_col_summary <- set_names(attrs$sticky_col_summary, sticky_col_names)
+  sticky_col_show <- set_names(attrs$sticky_col_show, sticky_col_names)
 
-  attr(x, "main_col_names") <- main_col_names
-  attr(x, "main_col_summary") <- main_col_summary
-  attr(x, "main_col_show") <- main_col_show
+  attr(x, "sticky_col_names") <- sticky_col_names
+  attr(x, "sticky_col_summary") <- sticky_col_summary
+  attr(x, "sticky_col_show") <- sticky_col_show
 
   NextMethod()
 }
 
-update_main_cols <- function(x, main_col_names, attrs) {
-  attr(x, "main_col_names") <- main_col_names
-  attr(x, "main_col_summary") <- attrs$main_col_summary[main_col_names]
-  attr(x, "main_col_show") <- attrs$main_col_show[main_col_names]
+update_sticky_cols <- function(x, sticky_col_names, attrs) {
+  attr(x, "sticky_col_names") <- sticky_col_names
+  attr(x, "sticky_col_summary") <- attrs$sticky_col_summary[sticky_col_names]
+  attr(x, "sticky_col_show") <- attrs$sticky_col_show[sticky_col_names]
   x
 }
 
-hidden_col_names <- function(main_col_show) {
-  if (vec_is_empty(main_col_show)) {
+hidden_col_names <- function(sticky_col_show) {
+  if (vec_is_empty(sticky_col_show)) {
     character()
   } else {
-    main_col_show <- vec_c(!!!main_col_show)
-    names(main_col_show)[!main_col_show]
+    sticky_col_show <- vec_c(!!!sticky_col_show)
+    names(sticky_col_show)[!sticky_col_show]
   }
 }
 
 drop_hidden_cols <- function(x) {
   attrs <- attributes(x)
-  hidden_col_names <- hidden_col_names(attrs$main_col_show)
+  hidden_col_names <- hidden_col_names(attrs$sticky_col_show)
 
-  main_col_names <- attrs$main_col_names
-  main_col_names <- main_col_names[!main_col_names %in% hidden_col_names]
+  sticky_col_names <- attrs$sticky_col_names
+  sticky_col_names <- sticky_col_names[!sticky_col_names %in% hidden_col_names]
 
-  x <- update_main_cols(x, main_col_names, attrs)
+  x <- update_sticky_cols(x, sticky_col_names, attrs)
   x[!names(x) %in% hidden_col_names]
 }
 
+#' @importFrom dplyr select
 #' @export
-format.tbl_main <- function(x, ...) {
+select.tbl_sticky <- function(.data, ...) {
+  out <- NextMethod()
+
+  attrs <- attributes(.data)
+  sticky_col_names <- attrs$sticky_col_names
+  col_names <- names(out)
+
+  for (sticky_col_name in sticky_col_names) {
+    if (!sticky_col_name %in% col_names) {
+      out <- vec_cbind(out,
+                       !!sticky_col_name := .data[[sticky_col_name]])
+    }
+  }
+
+  update_sticky_cols(out, sticky_col_names, attrs)
+}
+
+#' @importFrom dplyr ungroup
+#' @export
+ungroup.tbl_sticky <- function(x, ...) {
+  ellipsis::check_dots_empty()
+  x
+}
+
+#' @export
+format.tbl_sticky <- function(x, ...) {
   x <- drop_hidden_cols(x)
   NextMethod()
 }
 
 #' @importFrom pillar tbl_sum
 #' @export
-tbl_sum.tbl_main <- function(x) {
+tbl_sum.tbl_sticky <- function(x) {
   out <- NextMethod()
 
-  hidden_col_names <- hidden_col_names(attr(x, "main_col_show"))
+  hidden_col_names <- hidden_col_names(attr(x, "sticky_col_show"))
 
-  main_col_names <- attr(x, "main_col_names")
-  main_col_names <- main_col_names[!main_col_names %in% hidden_col_names]
+  sticky_col_names <- attr(x, "sticky_col_names")
+  sticky_col_names <- sticky_col_names[!sticky_col_names %in% hidden_col_names]
 
-  if (!vec_is_empty(main_col_names)) {
+  if (!vec_is_empty(sticky_col_names)) {
     out <- c(out,
-             `Main columns` = paste0(attr(x, "main_col_names"), collapse = ", "))
+             Stickers = paste0(attr(x, "sticky_col_names"), collapse = ", "))
   }
 
   out
-}
-
-#' @importFrom dplyr select
-#' @export
-select.tbl_main <- function(.data, ...) {
-  out <- NextMethod()
-
-  attrs <- attributes(.data)
-  main_col_names <- attrs$main_col_names
-  col_names <- names(out)
-
-  for (main_col_name in main_col_names) {
-    if (!main_col_name %in% col_names) {
-      out <- vec_cbind(out,
-                       !!main_col_name := .data[[main_col_name]])
-    }
-  }
-
-  update_main_cols(out, main_col_names, attrs)
 }
 
 #' #' @export

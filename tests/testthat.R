@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(mainframes)
+library(stickyr)
 
-test_check("mainframes")
+test_check("stickyr")

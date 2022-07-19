@@ -1,4 +1,4 @@
-Package: mainframes
+Package: stickyr
 Type: Package
 Title: Data Frames With Persistent Columns and Attributes
 Version: 0.1.0
@@ -13,6 +13,7 @@ RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 Imports: 
     dplyr,
+    ellipsis,
     pillar,
     purrr,
     rlang,
