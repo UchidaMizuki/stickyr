@@ -3,7 +3,6 @@
 S3method("[",grouped_sticky)
 S3method("[",rowwise_sticky)
 S3method("[",tbl_sticky)
-S3method("names<-",tbl_sticky)
 S3method(as_tbl_sticky,grouped_sticky)
 S3method(as_tbl_sticky,rowwise_sticky)
 S3method(as_tbl_sticky,tbl_sticky)
