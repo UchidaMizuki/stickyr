@@ -1,8 +1,8 @@
 #' @importFrom dplyr group_by
 #' @export
-group_by.tbl_sticky <- function(.data, ...,
-                                .add = FALSE,
-                                .drop = dplyr::group_by_drop_default(.data)) {
+group_by.sticky_tbl_df <- function(.data, ...,
+                                   .add = FALSE,
+                                   .drop = dplyr::group_by_drop_default(.data)) {
   groups <- dplyr::group_by_prepare(.data, ...,
                                     .add = .add,
                                     caller_env = caller_env())
@@ -24,7 +24,7 @@ group_by.tbl_sticky <- function(.data, ...,
 group_by.grouped_sticky <- function(.data, ...,
                                     .add = FALSE,
                                     .drop = dplyr::group_by_drop_default(.data)) {
-  .data <- as_tbl_sticky(.data)
+  .data <- as_sticky_tbl_df(.data)
   group_by(.data, ...,
            .add = .add,
            .drop = .drop)
@@ -34,7 +34,7 @@ group_by.grouped_sticky <- function(.data, ...,
 group_by.rowwise_sticky <- function(.data, ...,
                                     .add = FALSE,
                                     .drop = dplyr::group_by_drop_default(.data)) {
-  .data <- as_tbl_sticky(.data)
+  .data <- as_sticky_tbl_df(.data)
   group_by(.data, ...,
            .add = .add,
            .drop = .drop)
@@ -58,12 +58,12 @@ group_by.rowwise_sticky <- function(.data, ...,
 }
 
 #' @export
-as_tbl_sticky.grouped_sticky <- function(x, ...) {
+as_sticky_tbl_df.grouped_sticky <- function(x, ...) {
   attr(x, "groups") <- NULL
 
   class_tbl <- attr(x, "class_tbl")
   class_grouped <- attr(x, "class_grouped")
-  class(x) <- c(class_tbl, "tbl_sticky",
+  class(x) <- c(class_tbl, "sticky_tbl_df",
                 setdiff(class(x), c(class_grouped, "grouped_sticky", "grouped_df")))
   x
 }
@@ -72,7 +72,7 @@ as_tbl_sticky.grouped_sticky <- function(x, ...) {
 #' @export
 ungroup.grouped_sticky <- function(x, ...) {
   if (missing(...)) {
-    as_tbl_sticky(x)
+    as_sticky_tbl_df(x)
   } else {
     NextMethod()
   }

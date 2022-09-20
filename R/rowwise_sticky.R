@@ -1,6 +1,6 @@
 #' @importFrom dplyr rowwise
 #' @export
-rowwise.tbl_sticky <- function(data, ...) {
+rowwise.sticky_tbl_df <- function(data, ...) {
   hidden_col_names <- hidden_col_names(attr(data, "sticky_col_show"))
   vars <- tidyselect::eval_select(expr(c(...)), data)
   vars <- setdiff(vars, hidden_col_names)
@@ -17,13 +17,13 @@ rowwise.tbl_sticky <- function(data, ...) {
 
 #' @export
 rowwise.grouped_sticky <- function(data, ...) {
-  data <- as_tbl_sticky(data)
+  data <- as_sticky_tbl_df(data)
   rowwise(data, ...)
 }
 
 #' @export
 rowwise.rowwise_sticky <- function(data, ...) {
-  data <- as_tbl_sticky(data)
+  data <- as_sticky_tbl_df(data)
   rowwise(data, ...)
 }
 
@@ -45,12 +45,12 @@ rowwise.rowwise_sticky <- function(data, ...) {
 }
 
 #' @export
-as_tbl_sticky.rowwise_sticky <- function(x, ...) {
+as_sticky_tbl_df.rowwise_sticky <- function(x, ...) {
   attr(x, "groups") <- NULL
 
   class_tbl <- attr(x, "class_tbl")
   class_rowwise <- attr(x, "class_rowwise")
-  class(x) <- c(class_tbl, "tbl_sticky",
+  class(x) <- c(class_tbl, "sticky_tbl_df",
                 setdiff(class(x), c(class_rowwise, "rowwise_sticky", "rowwise_df")))
   x
 }
@@ -59,7 +59,7 @@ as_tbl_sticky.rowwise_sticky <- function(x, ...) {
 #' @export
 ungroup.rowwise_sticky <- function(x, ...) {
   ellipsis::check_dots_empty()
-  as_tbl_sticky(x)
+  as_sticky_tbl_df(x)
 }
 
 #' @export
