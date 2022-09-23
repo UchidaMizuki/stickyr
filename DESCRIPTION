@@ -2,10 +2,15 @@ Package: stickyr
 Type: Package
 Title: Data Frames With Persistent Columns and Attributes
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: 
+    person(
+        given = "Mizuki", 
+        family = "Uchida", 
+        email = "uchidamizuki@vivaldi.net", 
+        role = c("aut", "cre")
+    )
+Description: Provides data frames that hold certain columns and attributes 
+    persistently for data processing in dplyr.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -21,5 +26,6 @@ Imports:
     tidyselect,
     vctrs
 Suggests: 
+    covr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

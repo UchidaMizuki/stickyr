@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# stickyr
+
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/UchidaMizuki/stickyr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UchidaMizuki/stickyr?branch=main)
+<!-- badges: end -->
+
+stickyr provides data frames that hold certain columns and attributes 
+persistently for data processing in dplyr. It can also hide specific columns.
+
+## Installation
+
+You can install the development version of stickyr from 
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("UchidaMizuki/stickyr")
+```
+
+## Example
+
+```{r, message=FALSE, warning=FALSE}
+library(stickyr)
+library(dplyr)
+
+sticky_starwars <- new_sticky_tibble(dplyr::starwars,
+                                     cols = c(height, mass, birth_year),
+                                     col_show = !birth_year,
+                                     col_summary = list(height = mean,
+                                                        mass = sum,
+                                                        birth_year = median))
+
+sticky_starwars
+```
+
+### Select data
+
+```{r}
+sticky_starwars |> 
+  select(name, species)
+```
+
+### Summarise data
+
+```{r}
+sticky_starwars |> 
+  group_by(species) |> 
+  summarise()
+```

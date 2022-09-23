@@ -32,7 +32,7 @@ summarise_sticky <- function(data, data_summarised) {
                         function(.cols, .fns) {
                           expr(dplyr::across(!!.cols, !!.fns))
                         })
-    data_summarised <- vec_cbind(data_summarised, dplyr::summarise(data, !!!args)[col_names])
+    data_summarised <- tibble::add_column(data_summarised, !!!tibble::as_tibble(dplyr::summarise(data, !!!args))[col_names])
   }
 
   restore_sticky_attrs(data_summarised, data)

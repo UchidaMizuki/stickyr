@@ -1,3 +1,21 @@
+#' Constructs a tibble with persistent columns and attributes
+#'
+#' `new_sticky_tibble` constructs a tibble with persistent columns and
+#' attributes. These persistent columns can be hidden.
+#'
+#' @param x A tibble-like object.
+#' @param cols Columns to be kept persistently.
+#' @param col_show Which persistent columns to show? By default, all are
+#' displayed.
+#' @param col_summary A named list of functions to summarise persistent columns.
+#' @param attrs Names of attributes to be kept persistently.
+#' @param ... Additional attributes.
+#' @param class Subclasses.
+#' @param class_grouped_df Subclasses of grouped_df.
+#' @param class_rowwise_df Subclasses of rowwise_df.
+#'
+#' @return A sticky tibble ('sticky_tbl_df') object.
+#'
 #' @export
 new_sticky_tibble <- function(x = list(),
                               cols = tidyselect::last_col(),
@@ -34,6 +52,16 @@ new_sticky_tibble <- function(x = list(),
                      class_rowwise_df = class_rowwise_df)
 }
 
+
+#' Coerce objects to sticky tibble
+#'
+#' 'as_sticky_tibble' turns an object to a sticky tibble ('sticky_tbl_df').
+#'
+#' @param x An object.
+#' @param ... Unused, for extensibility.
+#'
+#' @return A sticky tibble ('sticky_tbl_df') object.
+#'
 #' @export
 as_sticky_tibble <- function(x, ...) {
   UseMethod("as_sticky_tibble")
@@ -47,7 +75,7 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 #' @export
 `[.sticky_tbl_df` <- function(x, ...) {
   out <- NextMethod()
-  sticky_cols <- attr(out, "sticky_cols")
+  sticky_cols <- attr(x, "sticky_cols")
   attr(out, "sticky_cols") <- vec_slice(sticky_cols, intersect(row.names(sticky_cols), names(out)))
   out
 }
@@ -55,19 +83,9 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 #' @export
 `names<-.sticky_tbl_df` <- function(x, value) {
   out <- NextMethod()
-  sticky_cols <- attr(out, "sticky_cols")
+  sticky_cols <- attr(x, "sticky_cols")
   loc <- vec_match(row.names(sticky_cols), names(x))
   row.names(sticky_cols) <- vec_slice(names(out), loc)
-  attr(out, "sticky_cols") <- sticky_cols
-  out
-}
-
-#' @importFrom dplyr select
-#' @export
-select.sticky_tbl_df <- function(.data, ...) {
-  out <- NextMethod()
-  sticky_cols <- attr(out, "sticky_cols")
-  out <- vec_cbind(out, .data[setdiff(row.names(sticky_cols), names(out))])
   attr(out, "sticky_cols") <- sticky_cols
   out
 }

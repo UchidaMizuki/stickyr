@@ -5,7 +5,9 @@ test_that("new_sticky_tibble", {
   # cols
   expect_output(
     new_sticky_tibble(x,
-                      cols = col_1)
+                      cols = col_1) |>
+      print(),
+    "# Stickers: col_1"
   )
 
   expect_error(
@@ -17,7 +19,9 @@ test_that("new_sticky_tibble", {
   expect_output(
     new_sticky_tibble(x,
                       cols = col_1,
-                      col_summary = list(col_1 = vec_init))
+                      col_summary = list(col_1 = vec_init)) |>
+      print(),
+    "# Stickers: col_1"
   )
 
   expect_error(
@@ -30,7 +34,9 @@ test_that("new_sticky_tibble", {
   expect_output(
     new_sticky_tibble(x,
                       cols = col_1,
-                      col_show = col_1)
+                      col_show = col_1) |>
+      print(),
+    "# Stickers: col_1"
   )
 
   expect_error(
