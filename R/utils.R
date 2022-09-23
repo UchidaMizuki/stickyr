@@ -15,22 +15,33 @@ restore_sticky_attrs <- function(x, to) {
   class_rowwise_df <- attrs$class_rowwise_df
 
   attrs <- attrs[sticky_attrs]
-  exec(structure, x,
-       sticky_cols = sticky_cols,
-       sticky_attrs = sticky_attrs,
-       !!!attrs,
-       class_tbl_df = class_tbl_df,
-       class_rowwise_df = class_rowwise_df,
-       class_rowwise_df = class_rowwise_df)
-}
 
-add_sticky_class <- function(x) {
-  if (inherits(x, "grouped_df")) {
+  x <- exec(structure, x,
+            sticky_cols = sticky_cols,
+            sticky_attrs = sticky_attrs,
+            !!!attrs,
+            class_tbl_df = class_tbl_df,
+            class_rowwise_df = class_rowwise_df,
+            class_rowwise_df = class_rowwise_df)
+
+  # add sticky class
+  if (inherits(x, "grouped_df") && !inherits(x, "sticky_grouped_df")) {
     class(x) <- c(attr(x, "class_grouped_df"), "sticky_grouped_df", class(x))
-  } else if (inherits(x, "rowwise_df")) {
+  } else if (inherits(x, "rowwise_df") && !inherits(x, "sticky_rowwise_df")) {
     class(x) <- c(attr(x, "class_rowwise_df"), "sticky_rowwise_df", class(x))
-  } else {
+  } else if (inherits(x, "tbl_df") && !inherits(x, "sticky_tbl_df")) {
     class(x) <- c(attr(x, "class_tbl_df"), "sticky_tbl_df", class(x))
   }
   x
 }
+
+# add_sticky_class <- function(x) {
+#   if (inherits(x, "grouped_df")) {
+#     class(x) <- c(attr(x, "class_grouped_df"), "sticky_grouped_df", class(x))
+#   } else if (inherits(x, "rowwise_df")) {
+#     class(x) <- c(attr(x, "class_rowwise_df"), "sticky_rowwise_df", class(x))
+#   } else {
+#     class(x) <- c(attr(x, "class_tbl_df"), "sticky_tbl_df", class(x))
+#   }
+#   x
+# }

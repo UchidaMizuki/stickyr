@@ -35,6 +35,5 @@ summarise_sticky <- function(data, data_summarised) {
     data_summarised <- vec_cbind(data_summarised, dplyr::summarise(data, !!!args)[col_names])
   }
 
-  data_summarised <- restore_sticky_attrs(data_summarised, data)
-  add_sticky_class(data_summarised)
+  restore_sticky_attrs(data_summarised, data)
 }

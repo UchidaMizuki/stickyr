@@ -10,8 +10,7 @@
 #' @export
 as_sticky_tibble.sticky_rowwise_df <- function(x, ...) {
   out <- tibble::as_tibble(x)
-  out <- restore_sticky_attrs(out, x)
-  add_sticky_class(out)
+  restore_sticky_attrs(out, x)
 }
 
 #' @importFrom dplyr ungroup
