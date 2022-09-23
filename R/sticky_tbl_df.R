@@ -16,8 +16,14 @@ new_sticky_tibble <- function(x = list(),
                                  summary = list(vec_init),
                                  .size = vec_size(cols)),
                          row.names = cols)
-  vec_slice(cols, col_show)$show <- TRUE
-  vec_slice(cols, names(col_summary))$summary <- col_summary
+
+  if (!vec_is_empty(col_show)) {
+    vec_slice(cols, col_show)$show <- TRUE
+  }
+
+  if (!vec_is_empty(col_summary)) {
+    vec_slice(cols, names(col_summary))$summary <- col_summary
+  }
 
   tibble::new_tibble(x,
                      sticky_cols = cols,
@@ -42,54 +48,28 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 `[.sticky_tbl_df` <- function(x, ...) {
   out <- NextMethod()
   sticky_cols <- attr(out, "sticky_cols")
-  attr(out, "sticky_cols") <- vec_slice(sticky_cols, intersect(names(out), row.names(sticky_cols)))
+  attr(out, "sticky_cols") <- vec_slice(sticky_cols, intersect(row.names(sticky_cols), names(out)))
   out
 }
 
-# #' @export
-# `names<-.sticky_tbl_df` <- function(x, value) {
-#   col_names <- names(x)
-#   value <- set_names(value, col_names)
-#
-#   attrs <- attributes(x)
-#   sticky_cols <- attrs$sticky_cols
-#   x <- update_sticky_cols(x, sticky_cols, attrs)
-#
-#   sticky_cols <- unname(value[sticky_cols])
-#   sticky_col_summary <- set_names(attrs$sticky_col_summary, sticky_cols)
-#   sticky_col_show <- set_names(attrs$sticky_col_show, sticky_cols)
-#
-#   attr(x, "sticky_cols") <- sticky_cols
-#   attr(x, "sticky_col_summary") <- sticky_col_summary
-#   attr(x, "sticky_col_show") <- sticky_col_show
-#
-#   NextMethod()
-# }
-
-drop_hidden_cols <- function(x) {
-  sticky_cols <- attr(x, "sticky_cols")
-  hidden_cols <- vec_slice(row.names(sticky_cols), sticky_cols$show)
-
-  x[!names(x) %in% names(hidden_cols)]
+#' @export
+`names<-.sticky_tbl_df` <- function(x, value) {
+  out <- NextMethod()
+  sticky_cols <- attr(out, "sticky_cols")
+  loc <- vec_match(row.names(sticky_cols), names(x))
+  row.names(sticky_cols) <- vec_slice(names(out), loc)
+  attr(out, "sticky_cols") <- sticky_cols
+  out
 }
 
 #' @importFrom dplyr select
 #' @export
 select.sticky_tbl_df <- function(.data, ...) {
   out <- NextMethod()
-
-  attrs <- attributes(.data)
-  sticky_cols <- attrs$sticky_cols
-  col_names <- names(out)
-
-  for (sticky_col_name in sticky_cols) {
-    if (!sticky_col_name %in% col_names) {
-      out <- vec_cbind(out,
-                       !!sticky_col_name := .data[[sticky_col_name]])
-    }
-  }
-
-  update_sticky_cols(out, sticky_cols, attrs)
+  sticky_cols <- attr(out, "sticky_cols")
+  out <- vec_cbind(out, .data[setdiff(row.names(sticky_cols), names(out))])
+  attr(out, "sticky_cols") <- sticky_cols
+  out
 }
 
 #' @importFrom dplyr ungroup
@@ -102,6 +82,7 @@ ungroup.sticky_tbl_df <- function(x, ...) {
 #' @export
 format.sticky_tbl_df <- function(x, ...) {
   x <- drop_hidden_cols(x)
+
   NextMethod()
 }
 
@@ -109,13 +90,11 @@ format.sticky_tbl_df <- function(x, ...) {
 #' @export
 tbl_sum.sticky_tbl_df <- function(x) {
   out <- NextMethod()
-
   sticky_cols <- attr(x, "sticky_cols")
 
   if (!vec_is_empty(sticky_cols)) {
     out <- c(out,
              Stickers = paste0(row.names(sticky_cols), collapse = ", "))
   }
-
   out
 }
