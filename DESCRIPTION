@@ -19,6 +19,7 @@ Roxygen: list(markdown = TRUE)
 Imports: 
     dplyr,
     ellipsis,
+    generics,
     pillar,
     purrr,
     rlang,

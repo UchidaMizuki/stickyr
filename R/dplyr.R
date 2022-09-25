@@ -43,6 +43,9 @@ count.sticky_rowwise_df <- function(x, ..., wt = NULL, sort = FALSE, name = NULL
 
 #' @importFrom dplyr filter
 #' @export
+dplyr::filter
+
+#' @export
 filter.sticky_tbl_df <- function(.data, ..., .preserve = FALSE) {
   restore_sticky_attrs(NextMethod(), .data)
 }
@@ -316,6 +319,10 @@ rowwise.sticky_rowwise_df <- function(.data, ...,
 
 # set ---------------------------------------------------------------------
 
+#' @importFrom generics intersect
+#' @export
+generics::intersect
+
 #' @export
 intersect.sticky_tbl_df <- function(x, y, ...) {
   restore_sticky_attrs(NextMethod(), x)
@@ -331,6 +338,10 @@ intersect.sticky_rowwise_df <- function(x, y, ...) {
   restore_sticky_attrs(NextMethod(), x)
 }
 
+#' @importFrom generics setdiff
+#' @export
+generics::setdiff
+
 #' @export
 setdiff.sticky_tbl_df <- function(x, y, ...) {
   restore_sticky_attrs(NextMethod(), x)
@@ -345,6 +356,10 @@ setdiff.sticky_grouped_df <- function(x, y, ...) {
 setdiff.sticky_rowwise_df <- function(x, y, ...) {
   restore_sticky_attrs(NextMethod(), x)
 }
+
+#' @importFrom generics union
+#' @export
+generics::union
 
 #' @export
 union.sticky_tbl_df <- function(x, y, ...) {
