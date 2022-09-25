@@ -18,7 +18,7 @@
 #'
 #' @export
 new_sticky_tibble <- function(x = list(),
-                              cols = tidyselect::last_col(),
+                              cols = NULL,
                               col_show = tidyselect::everything(),
                               col_summary = list(),
                               attrs = character(), ...,

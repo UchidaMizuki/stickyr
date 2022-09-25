@@ -6,7 +6,7 @@
 \usage{
 new_sticky_tibble(
   x = list(),
-  cols = tidyselect::last_col(),
+  cols = NULL,
   col_show = tidyselect::everything(),
   col_summary = list(),
   attrs = character(),
