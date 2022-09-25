@@ -1,7 +1,7 @@
 #' @export
 `[.sticky_rowwise_df` <- function(x, ...) {
   out <- NextMethod()
-  sticky_cols <- attr(out, "sticky_cols")
+  sticky_cols <- attr(x, "sticky_cols")
   attr(out, "sticky_cols") <- vec_slice(sticky_cols, intersect(row.names(sticky_cols), names(out)))
   class(out) <- class(x)
   out
@@ -33,9 +33,8 @@ format.sticky_rowwise_df <- function(x, ...) {
 #' @importFrom pillar tbl_sum
 #' @export
 tbl_sum.sticky_rowwise_df <- function(x) {
-  sticky_cols <- attr(x, "sticky_cols")
-
   out <- NextMethod()
+  sticky_cols <- attr(x, "sticky_cols")
 
   if (!vec_is_empty(sticky_cols)) {
     out <- c(out[1],

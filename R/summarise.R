@@ -1,23 +1,17 @@
 #' @importFrom dplyr summarise
 #' @export
 summarise.sticky_tbl_df <- function(.data, ..., .groups = NULL) {
-  out <- NextMethod()
-
-  summarise_sticky(.data, out)
+  summarise_sticky(.data, NextMethod())
 }
 
 #' @export
 summarise.sticky_grouped_df <- function(.data, ..., .groups = NULL) {
-  out <- NextMethod()
-
-  summarise_sticky(.data, out)
+  summarise_sticky(.data, NextMethod())
 }
 
 #' @export
 summarise.sticky_rowwise_df <- function(.data, ..., .groups = NULL) {
-  out <- NextMethod()
-
-  summarise_sticky(.data, out)
+  summarise_sticky(.data, NextMethod())
 }
 
 summarise_sticky <- function(data, data_summarised) {
@@ -32,7 +26,7 @@ summarise_sticky <- function(data, data_summarised) {
                         function(.cols, .fns) {
                           expr(dplyr::across(!!.cols, !!.fns))
                         })
-    data_summarised <- tibble::add_column(data_summarised, !!!tibble::as_tibble(dplyr::summarise(data, !!!args))[col_names])
+    data_summarised <- dplyr::bind_cols(data_summarised, tibble::as_tibble(dplyr::summarise(data, !!!args))[col_names])
   }
 
   restore_sticky_attrs(data_summarised, data)

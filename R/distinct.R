@@ -1,26 +1,21 @@
 #' @importFrom dplyr distinct
 #' @export
 distinct.sticky_tbl_df <- function(.data, ..., .keep_all = FALSE) {
-  distinct_sticky(.data, ...,
-                  .keep_all = .keep_all)
+  distinct_sticky(NextMethod(), .data, ...)
 }
 
 #' @export
 distinct.sticky_grouped_df <- function(.data, ..., .keep_all = FALSE) {
-  distinct_sticky(.data, ...,
-                  .keep_all = .keep_all)
+  distinct_sticky(NextMethod(), .data, ...)
 }
 
 #' @export
 distinct.sticky_rowwise_df <- function(.data, ..., .keep_all = FALSE) {
-  distinct_sticky(.data, ...,
-                  .keep_all = .keep_all)
+  distinct_sticky(NextMethod(), .data, ...)
 }
 
-distinct_sticky <- function(.data, ..., .keep_all) {
-  sticky_cols <- attr(.data, "sticky_cols")
-  class(.data) <- setdiff(class(.data), c("sticky_tbl_df", "sticky_grouped_df", "sticky_rowwise_df"))
-  out <- distinct(.data, ..., dplyr::across(dplyr::all_of(row.names(sticky_cols))),
-                  .keep_all = .keep_all)
-  restore_sticky_attrs(out, .data)
+distinct_sticky <- function(data_distinct, data, ...) {
+  data_summarised <- summarise(group_by(data, ...))
+  data_distinct <- dplyr::bind_cols(data_distinct, data_summarised[!names(data_summarised) %in% names(data_distinct)])
+  restore_sticky_attrs(data_distinct, data)
 }
