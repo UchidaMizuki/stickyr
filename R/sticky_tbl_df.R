@@ -52,6 +52,17 @@ new_sticky_tibble <- function(x = list(),
                      class_rowwise_df = class_rowwise_df)
 }
 
+#' Test if the object is a sticky tibble
+#'
+#' @param x An object
+#'
+#' @return `TRUE` if an object inherits from `sticky_tbl_df`,
+#' `sticky_grouped_df` or `sticky_rowwise_df` class.
+#'
+#' @export
+is_sticky_tibble <- function(x) {
+  inherits_any(x, c("sticky_tbl_df", "sticky_grouped_df", "sticky_rowwise_df"))
+}
 
 #' Coerce objects to sticky tibble
 #'
