@@ -16,11 +16,8 @@ as_sticky_tibble.sticky_rowwise_df <- function(x, ...) {
 #' @importFrom dplyr ungroup
 #' @export
 ungroup.sticky_rowwise_df <- function(x, ...) {
-  if (missing(...)) {
-    as_sticky_tibble(x)
-  } else {
-    NextMethod()
-  }
+  check_dots_empty()
+  as_sticky_tibble(x)
 }
 
 #' @export
