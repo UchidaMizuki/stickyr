@@ -43,3 +43,8 @@ tbl_sum.sticky_rowwise_df <- function(x) {
   }
   out
 }
+
+#' @export
+vec_ptype_abbr.sticky_rowwise_df <- function(x, ...) {
+  abbreviate("rowwise_df", 8L)
+}

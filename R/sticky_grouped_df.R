@@ -43,3 +43,8 @@ tbl_sum.sticky_grouped_df <- function(x) {
   }
   out
 }
+
+#' @export
+vec_ptype_abbr.sticky_grouped_df <- function(x, ...) {
+  abbreviate("grouped_df", 8L)
+}

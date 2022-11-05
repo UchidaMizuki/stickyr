@@ -127,3 +127,8 @@ tbl_sum.sticky_tbl_df <- function(x) {
   }
   out
 }
+
+#' @export
+vec_ptype_abbr.sticky_tbl_df <- function(x, ...) {
+  "tibble"
+}
