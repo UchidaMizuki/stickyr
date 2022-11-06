@@ -1,6 +1,6 @@
 Package: stickyr
 Type: Package
-Title: Data Frames With Persistent Columns and Attributes
+Title: Data Frames with Persistent Columns and Attributes
 Version: 0.1.0
 Authors@R: 
     person(
