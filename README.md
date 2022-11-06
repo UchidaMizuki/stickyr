@@ -7,6 +7,8 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/UchidaMizuki/stickyr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UchidaMizuki/stickyr?branch=main)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/stickyr)](https://CRAN.R-project.org/package=stickyr)
 <!-- badges: end -->
 
 stickyr provides data frames that hold certain columns and attributes
