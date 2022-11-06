@@ -10,7 +10,7 @@ Authors@R:
         role = c("aut", "cre")
     )
 Description: Provides data frames that hold certain columns and attributes 
-    persistently for data processing in dplyr.
+    persistently for data processing in 'dplyr'.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
