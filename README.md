@@ -5,10 +5,11 @@
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/UchidaMizuki/stickyr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UchidaMizuki/stickyr?branch=main)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/stickyr)](https://CRAN.R-project.org/package=stickyr)
+[![R-CMD-check](https://github.com/UchidaMizuki/stickyr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UchidaMizuki/stickyr/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/UchidaMizuki/stickyr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UchidaMizuki/stickyr?branch=main)
 <!-- badges: end -->
 
 stickyr provides data frames that hold certain columns and attributes
@@ -16,6 +17,12 @@ persistently for data processing in dplyr. It can also hide specific
 columns.
 
 ## Installation
+
+``` r
+install.packages("stickyr")
+```
+
+### Development version
 
 You can install the development version of stickyr from
 [GitHub](https://github.com/) with:
