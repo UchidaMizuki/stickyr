@@ -11,10 +11,12 @@
 #' @param attrs Names of attributes to be kept persistently.
 #' @param ... Additional attributes.
 #' @param class Subclasses.
-#' @param class_grouped_df Subclasses of grouped_df.
-#' @param class_rowwise_df Subclasses of rowwise_df.
+#' @param class_grouped_df Subclasses of grouped_df. By default, it is the same
+#' as `class`.
+#' @param class_rowwise_df Subclasses of rowwise_df. By default, it is the same
+#' as `class`.
 #'
-#' @return A sticky tibble ('sticky_tbl_df') object.
+#' @return A sticky tibble (`sticky_tbl_df`) object.
 #'
 #' @export
 new_sticky_tibble <- function(x = list(),
@@ -23,8 +25,8 @@ new_sticky_tibble <- function(x = list(),
                               col_summary = list(),
                               attrs = character(), ...,
                               class = character(),
-                              class_grouped_df = character(),
-                              class_rowwise_df = character()) {
+                              class_grouped_df = class,
+                              class_rowwise_df = class) {
 
   # sticky_cols
   cols <- names(tidyselect::eval_select(expr({{ cols }}), x))

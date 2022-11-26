@@ -12,8 +12,8 @@ new_sticky_tibble(
   attrs = character(),
   ...,
   class = character(),
-  class_grouped_df = character(),
-  class_rowwise_df = character()
+  class_grouped_df = class,
+  class_rowwise_df = class
 )
 }
 \arguments{
@@ -32,12 +32,14 @@ displayed.}
 
 \item{class}{Subclasses.}
 
-\item{class_grouped_df}{Subclasses of grouped_df.}
+\item{class_grouped_df}{Subclasses of grouped_df. By default, it is the same
+as \code{class}.}
 
-\item{class_rowwise_df}{Subclasses of rowwise_df.}
+\item{class_rowwise_df}{Subclasses of rowwise_df. By default, it is the same
+as \code{class}.}
 }
 \value{
-A sticky tibble ('sticky_tbl_df') object.
+A sticky tibble (\code{sticky_tbl_df}) object.
 }
 \description{
 \code{new_sticky_tibble} constructs a tibble with persistent columns and
