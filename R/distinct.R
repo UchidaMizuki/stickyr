@@ -15,8 +15,10 @@ distinct.sticky_rowwise_df <- function(.data, ..., .keep_all = FALSE) {
 }
 
 distinct_sticky <- function(data_distinct, data, ...) {
-  data_summarised <- summarise(group_by(data, ...),
+  data_summarised <- summarise(group_by(data, ...,
+                                        .add = TRUE),
                                .groups = "drop")
-  data_distinct <- dplyr::bind_cols(data_distinct, data_summarised[!names(data_summarised) %in% names(data_distinct)])
+  data_distinct <- dplyr::left_join(data_distinct, data_summarised,
+                                    by = names(data_distinct))
   restore_sticky_attrs(data_distinct, data)
 }

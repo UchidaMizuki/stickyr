@@ -7,4 +7,9 @@ test_that("distinct", {
 
   expect_no_error(data |>
                     distinct(col_1, col_3))
+
+  expect_no_error(data |>
+                    group_by(col_1) |>
+                    distinct(col_3))
 })
+
