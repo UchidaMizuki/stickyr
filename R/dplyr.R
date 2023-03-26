@@ -298,21 +298,18 @@ relocate.sticky_rowwise_df <- function(.data, ..., .preserve = FALSE) {
 
 #' @importFrom dplyr rowwise
 #' @export
-rowwise.sticky_tbl_df <- function(.data, ...,
-                                  .add = FALSE) {
-  restore_sticky_attrs(NextMethod(), .data)
+rowwise.sticky_tbl_df <- function(data, ...) {
+  restore_sticky_attrs(NextMethod(), data)
 }
 
 #' @export
-rowwise.sticky_grouped_df <- function(.data, ...,
-                                      .add = FALSE) {
-  restore_sticky_attrs(NextMethod(), .data)
+rowwise.sticky_grouped_df <- function(data, ...) {
+  restore_sticky_attrs(NextMethod(), data)
 }
 
 #' @export
-rowwise.sticky_rowwise_df <- function(.data, ...,
-                                      .add = FALSE) {
-  restore_sticky_attrs(NextMethod(), .data)
+rowwise.sticky_rowwise_df <- function(data, ...) {
+  restore_sticky_attrs(NextMethod(), data)
 }
 
 
