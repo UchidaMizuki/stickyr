@@ -21,7 +21,7 @@ Imports:
     generics,
     pillar,
     purrr,
-    rlang,
+    rlang (>= 1.0.0),
     tibble,
     tidyselect,
     vctrs
