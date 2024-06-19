@@ -106,7 +106,7 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 #' @importFrom dplyr ungroup
 #' @export
 ungroup.sticky_tbl_df <- function(x, ...) {
-  ellipsis::check_dots_empty()
+  check_dots_empty()
   x
 }
 
