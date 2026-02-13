@@ -16,9 +16,14 @@ ungroup.sticky_rowwise_df <- function(x, ...) {
 }
 
 #' @export
+print.sticky_rowwise_df <- function(x, ...) {
+  x <- drop_hidden_cols(x)
+  NextMethod()
+}
+
+#' @export
 format.sticky_rowwise_df <- function(x, ...) {
   x <- drop_hidden_cols(x)
-
   NextMethod()
 }
 

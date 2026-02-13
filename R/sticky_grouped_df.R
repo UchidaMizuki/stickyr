@@ -19,9 +19,14 @@ ungroup.sticky_grouped_df <- function(x, ...) {
 }
 
 #' @export
+print.sticky_grouped_df <- function(x, ...) {
+  x <- drop_hidden_cols(x)
+  NextMethod()
+}
+
+#' @export
 format.sticky_grouped_df <- function(x, ...) {
   x <- drop_hidden_cols(x)
-
   NextMethod()
 }
 

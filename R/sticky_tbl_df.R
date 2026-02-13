@@ -113,9 +113,14 @@ ungroup.sticky_tbl_df <- function(x, ...) {
 }
 
 #' @export
+print.sticky_tbl_df <- function(x, ...) {
+  x <- drop_hidden_cols(x)
+  NextMethod()
+}
+
+#' @export
 format.sticky_tbl_df <- function(x, ...) {
   x <- drop_hidden_cols(x)
-
   NextMethod()
 }
 
@@ -127,11 +132,12 @@ tbl_sum.sticky_tbl_df <- function(x) {
 
 tbl_sum_sticky <- function(x, data) {
   sticky_cols <- attr(data, "sticky_cols")
+  sticky_cols_show <- sticky_cols[sticky_cols$show, ]
 
-  if (!vec_is_empty(sticky_cols)) {
+  if (!vec_is_empty(sticky_cols_show)) {
     x <- c(
       x[1],
-      Stickers = paste0(row.names(sticky_cols), collapse = ", "),
+      Stickers = paste0(row.names(sticky_cols_show), collapse = ", "),
       x[-1]
     )
   }
