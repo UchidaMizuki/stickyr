@@ -37,3 +37,13 @@ restore_sticky_attrs <- function(x, to) {
   }
   x
 }
+
+restore_sticky_cols <- function(x, to) {
+  sticky_cols <- attr(to, "sticky_cols")
+  attr(x, "sticky_cols") <- vec_slice(
+    sticky_cols,
+    intersect(row.names(sticky_cols), names(x))
+  )
+  class(x) <- class(to)
+  x
+}

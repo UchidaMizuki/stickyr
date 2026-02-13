@@ -92,13 +92,7 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 
 #' @export
 `[.sticky_tbl_df` <- function(x, ...) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
-  attr(out, "sticky_cols") <- vec_slice(
-    sticky_cols,
-    intersect(row.names(sticky_cols), names(out))
-  )
-  out
+  restore_sticky_cols(NextMethod(), x)
 }
 
 #' @export
