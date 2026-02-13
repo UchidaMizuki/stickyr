@@ -1,6 +1,5 @@
 test_that("slice", {
-  data <- new_sticky_tibble(list(col_1 = letters,
-                                 col_2 = letters))
+  data <- new_sticky_tibble(list(col_1 = letters, col_2 = letters))
 
   data_1 <- data |>
     slice(1)

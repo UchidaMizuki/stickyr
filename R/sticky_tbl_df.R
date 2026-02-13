@@ -19,23 +19,25 @@
 #' @return A sticky tibble (`sticky_tbl_df`) object.
 #'
 #' @export
-new_sticky_tibble <- function(x = list(),
-                              cols = NULL,
-                              col_show = tidyselect::everything(),
-                              col_summary = list(),
-                              attrs = character(), ...,
-                              class = character(),
-                              class_grouped_df = class,
-                              class_rowwise_df = class) {
-
+new_sticky_tibble <- function(
+  x = list(),
+  cols = NULL,
+  col_show = tidyselect::everything(),
+  col_summary = list(),
+  attrs = character(),
+  ...,
+  class = character(),
+  class_grouped_df = class,
+  class_rowwise_df = class
+) {
   # sticky_cols
   cols <- names(tidyselect::eval_select(expr({{ cols }}), x))
   col_show <- tidyselect::eval_select(expr({{ col_show }}), set_names(cols))
 
-  cols <- new_data_frame(df_list(show = FALSE,
-                                 summary = list(vec_init),
-                                 .size = vec_size(cols)),
-                         row.names = cols)
+  cols <- new_data_frame(
+    df_list(show = FALSE, summary = list(vec_init), .size = vec_size(cols)),
+    row.names = cols
+  )
 
   if (!vec_is_empty(col_show)) {
     vec_slice(cols, col_show)$show <- TRUE
@@ -45,13 +47,16 @@ new_sticky_tibble <- function(x = list(),
     vec_slice(cols, names(col_summary))$summary <- col_summary
   }
 
-  tibble::new_tibble(x,
-                     sticky_cols = cols,
-                     sticky_attrs = attrs, ...,
-                     class = c(class, "sticky_tbl_df"),
-                     class_tbl_df = class,
-                     class_grouped_df = class_grouped_df,
-                     class_rowwise_df = class_rowwise_df)
+  tibble::new_tibble(
+    x,
+    sticky_cols = cols,
+    sticky_attrs = attrs,
+    ...,
+    class = c(class, "sticky_tbl_df"),
+    class_tbl_df = class,
+    class_grouped_df = class_grouped_df,
+    class_rowwise_df = class_rowwise_df
+  )
 }
 
 #' Test if the object is a sticky tibble
@@ -89,7 +94,10 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 `[.sticky_tbl_df` <- function(x, ...) {
   out <- NextMethod()
   sticky_cols <- attr(x, "sticky_cols")
-  attr(out, "sticky_cols") <- vec_slice(sticky_cols, intersect(row.names(sticky_cols), names(out)))
+  attr(out, "sticky_cols") <- vec_slice(
+    sticky_cols,
+    intersect(row.names(sticky_cols), names(out))
+  )
   out
 }
 
@@ -124,8 +132,7 @@ tbl_sum.sticky_tbl_df <- function(x) {
   sticky_cols <- attr(x, "sticky_cols")
 
   if (!vec_is_empty(sticky_cols)) {
-    out <- c(out,
-             Stickers = paste0(row.names(sticky_cols), collapse = ", "))
+    out <- c(out, Stickers = paste0(row.names(sticky_cols), collapse = ", "))
   }
   out
 }

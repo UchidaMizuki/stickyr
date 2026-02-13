@@ -46,12 +46,12 @@ devtools::install_github("UchidaMizuki/stickyr")
 library(stickyr)
 library(dplyr)
 
-sticky_starwars <- new_sticky_tibble(dplyr::starwars,
-                                     cols = c(height, mass, birth_year),
-                                     col_show = !birth_year,
-                                     col_summary = list(height = mean,
-                                                        mass = sum,
-                                                        birth_year = median))
+sticky_starwars <- new_sticky_tibble(
+  dplyr::starwars,
+  cols = c(height, mass, birth_year),
+  col_show = !birth_year,
+  col_summary = list(height = mean, mass = sum, birth_year = median)
+)
 
 sticky_starwars
 ```
@@ -59,14 +59,14 @@ sticky_starwars
 ### Select data
 
 ```{r}
-sticky_starwars |> 
+sticky_starwars |>
   select(name, species)
 ```
 
 ### Summarise data
 
 ```{r}
-sticky_starwars |> 
-  group_by(species) |> 
+sticky_starwars |>
+  group_by(species) |>
   summarise()
 ```

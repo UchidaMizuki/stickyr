@@ -16,14 +16,16 @@ restore_sticky_attrs <- function(x, to) {
 
   attrs <- attrs[sticky_attrs]
 
-
-  x <- exec(structure, x,
-            sticky_cols = sticky_cols,
-            sticky_attrs = sticky_attrs,
-            !!!attrs,
-            class_tbl_df = class_tbl_df,
-            class_grouped_df = class_grouped_df,
-            class_rowwise_df = class_rowwise_df)
+  x <- exec(
+    structure,
+    x,
+    sticky_cols = sticky_cols,
+    sticky_attrs = sticky_attrs,
+    !!!attrs,
+    class_tbl_df = class_tbl_df,
+    class_grouped_df = class_grouped_df,
+    class_rowwise_df = class_rowwise_df
+  )
 
   # add sticky class
   if (inherits(x, "grouped_df")) {

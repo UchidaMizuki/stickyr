@@ -2,7 +2,10 @@
 `[.sticky_grouped_df` <- function(x, ...) {
   out <- NextMethod()
   sticky_cols <- attr(x, "sticky_cols")
-  attr(out, "sticky_cols") <- vec_slice(sticky_cols, intersect(row.names(sticky_cols), names(out)))
+  attr(out, "sticky_cols") <- vec_slice(
+    sticky_cols,
+    intersect(row.names(sticky_cols), names(out))
+  )
   class(out) <- class(x)
   out
 }
@@ -37,9 +40,11 @@ tbl_sum.sticky_grouped_df <- function(x) {
   sticky_cols <- attr(x, "sticky_cols")
 
   if (!vec_is_empty(sticky_cols)) {
-    out <- c(out[1],
-             Stickers = paste0(row.names(sticky_cols), collapse = ", "),
-             out[2])
+    out <- c(
+      out[1],
+      Stickers = paste0(row.names(sticky_cols), collapse = ", "),
+      out[2]
+    )
   }
   out
 }

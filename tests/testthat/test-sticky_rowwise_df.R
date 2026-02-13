@@ -1,10 +1,10 @@
 test_that("sticky_rowwise_df", {
-  data <- new_sticky_tibble(list(col_1 = letters,
-                                 col_2 = letters,
-                                 col_3 = letters),
-                            cols = col_1,
-                            class = "my_tbl_df",
-                            class_rowwise_df = "my_rowwise_df") |>
+  data <- new_sticky_tibble(
+    list(col_1 = letters, col_2 = letters, col_3 = letters),
+    cols = col_1,
+    class = "my_tbl_df",
+    class_rowwise_df = "my_rowwise_df"
+  ) |>
     rowwise()
 
   expect_s3_class(data["col_1"], "my_rowwise_df")
