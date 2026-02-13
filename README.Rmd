@@ -52,7 +52,6 @@ sticky_starwars <- new_sticky_tibble(
   col_show = !birth_year,
   col_summary = list(height = mean, mass = sum, birth_year = median)
 )
-
 sticky_starwars
 ```
 
