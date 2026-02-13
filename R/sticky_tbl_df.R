@@ -122,13 +122,20 @@ format.sticky_tbl_df <- function(x, ...) {
 #' @importFrom pillar tbl_sum
 #' @export
 tbl_sum.sticky_tbl_df <- function(x) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
+  tbl_sum_sticky(NextMethod(), x)
+}
+
+tbl_sum_sticky <- function(x, data) {
+  sticky_cols <- attr(data, "sticky_cols")
 
   if (!vec_is_empty(sticky_cols)) {
-    out <- c(out, Stickers = paste0(row.names(sticky_cols), collapse = ", "))
+    x <- c(
+      x[1],
+      Stickers = paste0(row.names(sticky_cols), collapse = ", "),
+      x[-1]
+    )
   }
-  out
+  x
 }
 
 #' @export

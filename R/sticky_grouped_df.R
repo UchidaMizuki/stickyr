@@ -28,17 +28,7 @@ format.sticky_grouped_df <- function(x, ...) {
 #' @importFrom pillar tbl_sum
 #' @export
 tbl_sum.sticky_grouped_df <- function(x) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
-
-  if (!vec_is_empty(sticky_cols)) {
-    out <- c(
-      out[1],
-      Stickers = paste0(row.names(sticky_cols), collapse = ", "),
-      out[2]
-    )
-  }
-  out
+  tbl_sum_sticky(NextMethod(), x)
 }
 
 #' @export
