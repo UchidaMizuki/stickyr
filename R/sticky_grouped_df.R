@@ -1,19 +1,11 @@
 #' @export
 `[.sticky_grouped_df` <- function(x, ...) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
-  attr(out, "sticky_cols") <- vec_slice(
-    sticky_cols,
-    intersect(row.names(sticky_cols), names(out))
-  )
-  class(out) <- class(x)
-  out
+  restore_sticky_cols(NextMethod(), x)
 }
 
 #' @export
 as_sticky_tibble.sticky_grouped_df <- function(x, ...) {
-  out <- tibble::as_tibble(x)
-  restore_sticky_attrs(out, x)
+  restore_sticky_attrs(tibble::as_tibble(x), x)
 }
 
 #' @importFrom dplyr ungroup
@@ -27,26 +19,21 @@ ungroup.sticky_grouped_df <- function(x, ...) {
 }
 
 #' @export
+print.sticky_grouped_df <- function(x, ...) {
+  x <- drop_hidden_cols(x)
+  NextMethod()
+}
+
+#' @export
 format.sticky_grouped_df <- function(x, ...) {
   x <- drop_hidden_cols(x)
-
   NextMethod()
 }
 
 #' @importFrom pillar tbl_sum
 #' @export
 tbl_sum.sticky_grouped_df <- function(x) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
-
-  if (!vec_is_empty(sticky_cols)) {
-    out <- c(
-      out[1],
-      Stickers = paste0(row.names(sticky_cols), collapse = ", "),
-      out[2]
-    )
-  }
-  out
+  tbl_sum_sticky(NextMethod(), x)
 }
 
 #' @export

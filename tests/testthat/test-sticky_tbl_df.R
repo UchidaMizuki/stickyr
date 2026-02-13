@@ -30,6 +30,16 @@ test_that("new_sticky_tibble", {
     "# Stickers: col_1"
   )
 
+  x_col_show <- new_sticky_tibble(x, cols = c(col_1, col_2), col_show = col_1)
+  expect_match(
+    format(x_col_show),
+    "col_1",
+    all = FALSE
+  )
+  expect_no_match(
+    format(x_col_show),
+    "col_2"
+  )
   expect_error(
     new_sticky_tibble(x, cols = col_1, col_show = col_3)
   )

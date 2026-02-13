@@ -92,13 +92,7 @@ as_sticky_tibble.sticky_tbl_df <- function(x, ...) {
 
 #' @export
 `[.sticky_tbl_df` <- function(x, ...) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
-  attr(out, "sticky_cols") <- vec_slice(
-    sticky_cols,
-    intersect(row.names(sticky_cols), names(out))
-  )
-  out
+  restore_sticky_cols(NextMethod(), x)
 }
 
 #' @export
@@ -119,22 +113,35 @@ ungroup.sticky_tbl_df <- function(x, ...) {
 }
 
 #' @export
+print.sticky_tbl_df <- function(x, ...) {
+  x <- drop_hidden_cols(x)
+  NextMethod()
+}
+
+#' @export
 format.sticky_tbl_df <- function(x, ...) {
   x <- drop_hidden_cols(x)
-
   NextMethod()
 }
 
 #' @importFrom pillar tbl_sum
 #' @export
 tbl_sum.sticky_tbl_df <- function(x) {
-  out <- NextMethod()
-  sticky_cols <- attr(x, "sticky_cols")
+  tbl_sum_sticky(NextMethod(), x)
+}
 
-  if (!vec_is_empty(sticky_cols)) {
-    out <- c(out, Stickers = paste0(row.names(sticky_cols), collapse = ", "))
+tbl_sum_sticky <- function(x, data) {
+  sticky_cols <- attr(data, "sticky_cols")
+  sticky_cols_show <- sticky_cols[sticky_cols$show, ]
+
+  if (!vec_is_empty(sticky_cols_show)) {
+    x <- c(
+      x[1],
+      Stickers = paste0(row.names(sticky_cols_show), collapse = ", "),
+      x[-1]
+    )
   }
-  out
+  x
 }
 
 #' @export

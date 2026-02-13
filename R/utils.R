@@ -4,8 +4,8 @@ drop_hidden_cols <- function(x) {
   x[!names(x) %in% hidden_cols]
 }
 
-restore_sticky_attrs <- function(x, to) {
-  attrs <- attributes(to)
+restore_sticky_attrs <- function(x, data) {
+  attrs <- attributes(data)
 
   sticky_cols <- attrs$sticky_cols
   sticky_attrs <- attrs$sticky_attrs
@@ -35,5 +35,15 @@ restore_sticky_attrs <- function(x, to) {
   } else if (inherits(x, "tbl_df")) {
     class(x) <- unique(c(class_tbl_df, "sticky_tbl_df", class(x)))
   }
+  x
+}
+
+restore_sticky_cols <- function(x, data) {
+  sticky_cols <- attr(data, "sticky_cols")
+  attr(x, "sticky_cols") <- vec_slice(
+    sticky_cols,
+    intersect(row.names(sticky_cols), names(x))
+  )
+  class(x) <- class(data)
   x
 }
