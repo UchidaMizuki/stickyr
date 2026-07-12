@@ -4,6 +4,26 @@ drop_hidden_cols <- function(x) {
   x[!names(x) %in% hidden_cols]
 }
 
+# strip the sticky subclass to avoid recursing back into our own S3 dispatch
+strip_sticky_class <- function(x) {
+  class(x) <- setdiff(
+    class(x),
+    c("sticky_tbl_df", "sticky_grouped_df", "sticky_rowwise_df")
+  )
+  x
+}
+
+apply_sticky_class <- function(x, class_tbl_df, class_grouped_df, class_rowwise_df) {
+  if (inherits(x, "grouped_df")) {
+    class(x) <- unique(c(class_grouped_df, "sticky_grouped_df", class(x)))
+  } else if (inherits(x, "rowwise_df")) {
+    class(x) <- unique(c(class_rowwise_df, "sticky_rowwise_df", class(x)))
+  } else if (inherits(x, "tbl_df")) {
+    class(x) <- unique(c(class_tbl_df, "sticky_tbl_df", class(x)))
+  }
+  x
+}
+
 restore_sticky_attrs <- function(x, data) {
   attrs <- attributes(data)
 
@@ -27,15 +47,7 @@ restore_sticky_attrs <- function(x, data) {
     class_rowwise_df = class_rowwise_df
   )
 
-  # add sticky class
-  if (inherits(x, "grouped_df")) {
-    class(x) <- unique(c(class_grouped_df, "sticky_grouped_df", class(x)))
-  } else if (inherits(x, "rowwise_df")) {
-    class(x) <- unique(c(class_rowwise_df, "sticky_rowwise_df", class(x)))
-  } else if (inherits(x, "tbl_df")) {
-    class(x) <- unique(c(class_tbl_df, "sticky_tbl_df", class(x)))
-  }
-  x
+  apply_sticky_class(x, class_tbl_df, class_grouped_df, class_rowwise_df)
 }
 
 restore_sticky_cols <- function(x, data) {
@@ -46,4 +58,20 @@ restore_sticky_cols <- function(x, data) {
   )
   class(x) <- class(data)
   x
+}
+
+# compute one summarised row (grouped: one per group) for sticky columns;
+# `keep` carries along join-key columns (e.g. group vars) untouched
+sticky_summary <- function(data, sticky_cols, exclude = character(), keep = character()) {
+  args <- vec_slice(sticky_cols, !row.names(sticky_cols) %in% exclude)
+  if (vec_is_empty(args)) {
+    return(NULL)
+  }
+
+  data <- strip_sticky_class(data)
+  col_names <- row.names(args)
+  args <- purrr::map2(col_names, args$summary, function(.cols, .fns) {
+    expr(dplyr::across(!!.cols, !!.fns))
+  })
+  tibble::as_tibble(dplyr::summarise(data, !!!args))[c(keep, col_names)]
 }
