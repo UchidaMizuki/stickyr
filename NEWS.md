@@ -1,3 +1,8 @@
+# stickyr 0.1.3
+
+* Fix `col_show` not hiding columns when printing (#2).
+* Fix the `# Stickers:` summary line listing hidden sticky columns.
+
 # stickyr 0.1.2
 
 * Fix the argument of `rowwise()`.
