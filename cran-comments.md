@@ -1,13 +1,21 @@
 ## Test environments
 
-* local Windows 10 Pro, R 4.2.0
+* local Windows 11 Pro, R 4.5.2
 * win-builder (devel)
-* R-hub: Windows Server 2022, R-devel, 64 bit
-* R-hub: Ubuntu Linux 20.04.1 LTS, R-release, GCC
-* R-hub: Fedora Linux, R-devel, clang, gfortran
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* This is a new release.
+## Notes
+
+This is a patch release that fixes `col_show` not hiding columns when
+printing a sticky tibble (a display-only bug; no exported API changes).
+
+## revdepcheck results
+
+We checked 2 reverse dependencies, comparing R CMD check results across
+CRAN and dev versions of this package.
+
+* We saw 0 new problems
+* We failed to check 0 packages
