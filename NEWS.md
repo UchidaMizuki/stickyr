@@ -1,3 +1,5 @@
+# stickyr (development version)
+
 # stickyr 0.1.3
 
 * Fix `col_show` not hiding columns when printing (#2).
